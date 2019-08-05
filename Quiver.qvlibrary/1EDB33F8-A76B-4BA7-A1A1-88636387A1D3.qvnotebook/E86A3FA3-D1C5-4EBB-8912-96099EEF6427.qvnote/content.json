@@ -1,0 +1,31 @@
+{
+  "title": "Exceptions",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "C'est le mécanisme de gestion des erreurs. La classe par défaut est \"Exeception\". Il y a toute une série de sous-classes d'exceptions : TypeException, etc...\n"
+    },
+    {
+      "type": "markdown",
+      "data": "Les exceptions s'utilisent avec un bloc try/catch :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "<?php\ntry {\n  \n} catch(Exception $e) {\n  \n}"
+    },
+    {
+      "type": "markdown",
+      "data": "\"Throw\" permet de lever une exception d'un certain type."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "<?php\nthrow new Exception()"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    }
+  ]
+}
