@@ -1,0 +1,98 @@
+{
+  "title": "Test unitaires",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "Il faut commencer par installer <a href=\"https://packagist.org/packages/phpunit/phpunit\">phpunit</a> à l'aide de composer."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "composer --dev require phpunit/phpunit"
+    },
+    {
+      "type": "markdown",
+      "data": "Il faut ensuite créer un dossier pour les classes et un dossier pour les tests. Pour lancer un test sur une classe, on utilise vendor/bin/phpunit dossier-test/ dans la console. Exemple d'une classe de test :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "class MathTest extends PHPUnit\\Framework\\TestCase\n{\n    public function testDouble() {\n        $this->assertEquals(5, \\Grafikart\\Math::double(2));\n    }\n\n    public function testDoubleIfZero() {\n        $this->assertEquals(0, \\Grafikart\\Math::double(0));\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "On peut aussi configurer phpunit à l'aide d'un fichier XML nommé phpunit.xml à la racine du projet. Exemple :"
+    },
+    {
+      "type": "code",
+      "language": "xml",
+      "data": "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n\n<phpunit colors=\"true\">\n    <testsuite name=\"mes super tests\">\n            <directory>./tests</directory>\n    </testsuite>\n</phpunit>"
+    },
+    {
+      "type": "markdown",
+      "data": "Le fichier ci-dessus permet d'afficher les couleurs pour les tests unitaires et définit un dossier par défaut. On peut ainsi lancer nos tests unitaires avec un simple vendor/bin/phpunit"
+    },
+    {
+      "type": "markdown",
+      "data": "Concept de TDD : \"Test Driven Development\" : plutôt de créer une classe et de la tester, on va d'abord écrire les tests puis écrire notre classe."
+    },
+    {
+      "type": "markdown",
+      "data": "La base des tests unitaires sont les __assertions__. On va simuler l'exécution de fonctions, puis voir si telle assertion est vérifiée ou non."
+    },
+    {
+      "type": "markdown",
+      "data": "architecture :\n> src\n  > SvgRenderer\n> tests\n  > SvgRendererTest\n> phpunit"
+    },
+    {
+      "type": "markdown",
+      "data": "Syntaxe : Les noms des classes doivent finir par \"Test.php\" et les noms des méthodes doivent commencer par \"test\""
+    },
+    {
+      "type": "markdown",
+      "data": "Une méthode de test peut dépendre d'une autre classe de test :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "/**\n     * @depends testAddAttribute\n     * @param HTMLBuilder $b\n     */"
+    },
+    {
+      "type": "markdown",
+      "data": "__Fournisseur de données__ : Une méthode peut être déclarée comme fournissant des données à une méthode de test."
+    },
+    {
+      "type": "markdown",
+      "data": "1. on créée une source de données\n2. on lie la source à la méthode de test\n3. Les données sont utilisées comme paramètres de test\n4."
+    },
+    {
+      "type": "markdown",
+      "data": "Fixtures pour générer des fausses données"
+    },
+    {
+      "type": "markdown",
+      "data": "_mock_ = faux objet"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "$o = createMock(A::class);\n$f = function()...\n$f->bindTo($o, $o);"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    }
+  ]
+}

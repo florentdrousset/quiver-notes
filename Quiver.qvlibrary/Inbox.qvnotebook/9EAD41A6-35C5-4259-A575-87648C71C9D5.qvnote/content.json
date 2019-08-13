@@ -1,0 +1,342 @@
+{
+  "title": "Symfony log",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "### Mardi 13 Août 2019"
+    },
+    {
+      "type": "markdown",
+      "data": "On installe un projet Symfony 4 avec la commande"
+    },
+    {
+      "type": "markdown",
+      "data": "Pour lancer le serveur :  php -S localhost:8000 -t public/"
+    },
+    {
+      "type": "markdown",
+      "data": "Contrairement à Symfony 3, il n'y a pas de DefaultController donc on commence sur une erreur 404."
+    },
+    {
+      "type": "markdown",
+      "data": "app.php -> production\napp_dev.php -> developpement"
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": "composer create-project symfony/website-skeleton nom-de-projet"
+    },
+    {
+      "type": "markdown",
+      "data": "On peut utiliser \"make\" dans la console pour créer différentes choses, par exemple un contrôleur :"
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": "bin/console make:controller"
+    },
+    {
+      "type": "markdown",
+      "data": "Projet maison de disques :"
+    },
+    {
+      "type": "markdown",
+      "data": "User stories. Acteur -> Moyen -> Action"
+    },
+    {
+      "type": "markdown",
+      "data": "![disque_diagramme.png](quiver-image-url/1B05B3D232BB40A60F612F754F6A5543.png =784x1028)"
+    },
+    {
+      "type": "markdown",
+      "data": "Après avoir créé notre diagrame, on veut créer les entités symfony correspondantes."
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": " bin/console make:entity"
+    },
+    {
+      "type": "markdown",
+      "data": "Grâce à ça, on a créé une classe \"Artiste\" dans src/Entity et \"ArtisteRepository\" dans src/Repository."
+    },
+    {
+      "type": "markdown",
+      "data": "On créée ensuite la classe \"Evenement\" de la même manière. On veut lier notre classe \"Evenement\" à notre classe \"Artiste\". Pour cela, on lui rajoute un champ \"artiste_id\" avec le type \"relation\". On peut ensuite choisir \"manyToOne\" (par exemple). à la question"
+    },
+    {
+      "type": "markdown",
+      "data": " Do you want to add a new property to Artiste so that you can access/update Evenement objects from it - e.g. $artiste->getEvenements()? (yes/no) [yes]:\n"
+    },
+    {
+      "type": "markdown",
+      "data": ", si on répond oui, on peut aussi crééer une relation 1,n. Donc, requête doctrine qui permet de récupérer tous les évènements associés à un artiste."
+    },
+    {
+      "type": "code",
+      "language": "sh",
+      "data": "Do you want to activate orphanRemoval on your relationship?\n A Evenement is \"orphaned\" when it is removed from its related Artiste.\n e.g. $artiste->removeEvenement($evenement)\n \n NOTE: If a Evenement may *change* from one Artiste to another, answer \"no\".\n\n Do you want to automatically delete orphaned App\\Entity\\Evenement objects (orphanRemoval)? (yes/no) [no]:\n"
+    },
+    {
+      "type": "markdown",
+      "data": "Dans ce cas, si on supprime un Artiste, on se retrouvera avec des évènements orphelins. Si on répond oui, doctrine supprimera automatiquement les évènements qui n'ont plus d'artistes. \"No\" est donc plus secure dans ce cas-là."
+    },
+    {
+      "type": "markdown",
+      "data": "__Généralement, on ne crée par la relation One to Many, mais la Many to One.__"
+    },
+    {
+      "type": "code",
+      "language": "sh",
+      "data": "bin/console doctrine:database:create\nbin/console doctrine:schema:create (ou update)"
+    },
+    {
+      "type": "code",
+      "language": "sh",
+      "data": "bin/console make:crud Artist"
+    },
+    {
+      "type": "markdown",
+      "data": "On a eu une erreur sur le fait qu'Event voulait afficher Artist en string. Pour corriger le problème, on a implémenté la méthode __toString dans la classe Artiste pour corriger le problème."
+    },
+    {
+      "type": "markdown",
+      "data": "En lançant la commande _make:crud_, Symfony créée automatiquement les controllers et vues nécessaire. "
+    },
+    {
+      "type": "markdown",
+      "data": "Les classes de repository héritent de classes plus générales.\n->findAll() permet d'extraire toutes les données d'une table.\n->find(id) permet de sélectionner par l'id.\n->findBy('ville', 'bordeaux')\n->findByVille('bordeaux')\n\nDoctrine nous ramènera donc des objets.\n\nOn trouve également d'autres exemples dans nos classes Repository créées par défaut."
+    },
+    {
+      "type": "markdown",
+      "data": "Dans la classe ArtistController, on a également la méthode _new_."
+    },
+    {
+      "type": "markdown",
+      "data": "grâce au createForm, si on lui passe un objet $artist en deuxième paramètre, notre formulaire sera prérempli avec le contenu de cet objet."
+    },
+    {
+      "type": "markdown",
+      "data": "->handleRequest gère notre requête en POST, met les bonnes valeurs dans les bons objets, etc."
+    },
+    {
+      "type": "markdown",
+      "data": "On peut tester si un formulaire est submitted et s'il est valide. (classe de validation).\nSi tout est valide, grâce à la méthode persist de l'Entity manager, on previent doctrine que l'on est en train de créer un objet dans le mécanisme de persistence. (car notre objet existe dans le code PHP mais n'existe pas encore dans la base de données. On doit cependant prvenir doctrine qu'il doit déà être pris en compte.)"
+    },
+    {
+      "type": "markdown",
+      "data": "->flush() permet de remplir la base de données avec le contenu de notre objet."
+    },
+    {
+      "type": "markdown",
+      "data": "On fait ensuite une redirection HTTP avec la méthode redirectToRoute. "
+    },
+    {
+      "type": "markdown",
+      "data": "Pour créer la view qui correspond à notre formulaire, on passe à l'index 'array' la méthode $form->createView()."
+    },
+    {
+      "type": "markdown",
+      "data": "_Rappel_ : Dans Symfony, on ne manipule jamais les URL en temps que tel mais toujours les noms de route."
+    },
+    {
+      "type": "markdown",
+      "data": "#### Formulaires"
+    },
+    {
+      "type": "markdown",
+      "data": "Grâce au make:crud, Symfony a aussi créé des formulaires dans src/Form. "
+    },
+    {
+      "type": "markdown",
+      "data": "La méthode principale des formulaires est la méthode ->buildForm(). On ajoute des propriétés du $builder avec la méthode ->add()."
+    },
+    {
+      "type": "markdown",
+      "data": "Ne pas hésiter à lire la doc sur les [Form Types](https://symfony.com/doc/current/reference/forms/types/). Symfony est capable de comprender le type de données qu'on a défini en créant nos entités et créer le bon type de champ pour chaque champ du formulaire.\n"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "->add('artist_id', EntityType::class, [\n                'class' => Artist::class,\n                'choice_label' => 'name'\n            ])"
+    },
+    {
+      "type": "markdown",
+      "data": "Grâce à ca, on a plus a ajouter le toString dans notre controller Artist."
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": "### Lundi 12 Août 2019"
+    },
+    {
+      "type": "markdown",
+      "data": "Pour installer Symfony avec composer :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "composer create-project symfony/framework-standard-edition"
+    },
+    {
+      "type": "markdown",
+      "data": "Déjà prêt à l'emploi, version \"old school\" avec des ressources en démonstration"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "symfony/website-skeleton"
+    },
+    {
+      "type": "markdown",
+      "data": "Un peu similaire à la première, mais pas d'exemples en particulier."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "symfony/skeleton"
+    },
+    {
+      "type": "markdown",
+      "data": "Version \"flex\" qui n'installe que le noyau minimum du framework."
+    },
+    {
+      "type": "markdown",
+      "data": "Nous sommes donc sur \"symfony/symfony\": \"3.4.30\". La page d'accueil se situant dans web/"
+    },
+    {
+      "type": "markdown",
+      "data": "(Site semver.org => bonne pratiques pour nommer les versions d'un logiciel.)"
+    },
+    {
+      "type": "markdown",
+      "data": "Versions standard et LTS(Long-Term Support). Pour symfony 2 : 2.7/2.8 Pour Symfony 3 : 3.4"
+    },
+    {
+      "type": "markdown",
+      "data": "Architecture Symfony\n* app : _config, resources:stocke les templates, erreurs personnalisées, etc._\n* bin : _executables, console de symfony_\n* src :\n* * AppBundle\n* * * Controller __C__\n* * * * DefaultController\n* * * Entity __M__\n* * Resources : contenant les fichiers de description du modèle __M__: ORM Object Relationship Manager (Doctrine), description du modèle, routage, templates twigs_ __V__\n* * Repository : va contenir les classes de requêtes_ __M__\n* tests : _tests unitaires/fonctionnels_\n* var : _cache & logs_\n* vendor : _noyau, bibliothèques tierces (packagist), bibliothèques de l'appli._\n* web : _point d'entrée public. S'appelle public dans les versions suivantes. CSS, JS..._"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": "php bin/console pour lancer la console de symfony."
+    },
+    {
+      "type": "markdown",
+      "data": "Avant Symfony 3.3, Symfony était composé de bundles : unités peu fonctionnelles de manière autonome. (MVC)"
+    },
+    {
+      "type": "markdown",
+      "data": "Dans le dossier src, on a un \"AppBundle\", appellé à disparaître dans les versions ultérieures."
+    },
+    {
+      "type": "markdown",
+      "data": "Concept de \"services\" gérant tous les cas d'utilisations, traitement algorithmiques des données."
+    },
+    {
+      "type": "markdown",
+      "data": "Schéma simple d'une requête\nREQUÊTE => ROUTEUR => CONTRÔLEUR => MODELE -> Stockage\n                    -> React, Angular, Tw  -> Requêtes\n                                           -> [Persistance](quiver-note-url/8E89CBDD-7EF0-4447-A089-B5A493E7FEF9) (couche de). Permet à l'ORM de maintenir une cohérence entre l'application et les données stockées sur le disque\n                                           "
+    },
+    {
+      "type": "markdown",
+      "data": "![IMG_20190812_105736.jpg](quiver-image-url/54650D61DA69C85C2EF3009FA2047D95.jpg =3456x4608)"
+    },
+    {
+      "type": "markdown",
+      "data": "Comment Symfony affiche la première page d'accueil ? Grâce au DefaultController situé dans l'AppBundle/Controller (namespace AppBundle\\Controller)"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "<?php\n\nnamespace AppBundle\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\Routing\\Annotation\\Route;\n\nclass DefaultController extends Controller\n{\n    /**\n     * @Route(\"/\", name=\"homepage\")\n     */\n    public function indexAction(Request $request)\n    {\n        // replace this example code with whatever you need\n        return $this->render('default/index.html.twig', [\n            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,\n        ]);\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "Ici, le routeur a déjà analysé la requête HTTP en amont. La variable $request est un objet contenant toute notre requête."
+    },
+    {
+      "type": "markdown",
+      "data": "La méthode 'render' va construire la vue. \n1er paramètre : lien vers la vue. Celui-ci se trouve dans le dossier app/resources/views\n2eme paramètre : tableau associatif. 'base_dir' va devenir une variable native dans notre template."
+    },
+    {
+      "type": "markdown",
+      "data": "L'annotation @Route lie l'URL écrite dans le navigateur et le controlleur appelé par la suite."
+    },
+    {
+      "type": "markdown",
+      "data": "#### Création d'une page \"à propos\""
+    },
+    {
+      "type": "markdown",
+      "data": "Pour faire un lien vers une nouvelle page, on utilise la méthode 'render'. "
+    },
+    {
+      "type": "markdown",
+      "data": "Par exemple, dans notre DefaultController :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "    /**\n     * @Route(\"/about\", name=\"about\")\n     */\npublic function aboutAction() {\n        return $this->render('default/about.html.twig', [\n\n        ]);\n     }"
+    },
+    {
+      "type": "markdown",
+      "data": "On définit la route de notre page avec l'annotation @Route au-dessus de la méthode concernée."
+    },
+    {
+      "type": "markdown",
+      "data": "Le \"name\" est important. Si on veut faire référence à cette route plus tard, on l'appellera grâce à ce \"name\" là."
+    },
+    {
+      "type": "markdown",
+      "data": "Dans cette version, pas d'index.php, mais app.php (situé dans le dossier web)"
+    },
+    {
+      "type": "markdown",
+      "data": "On a aussi un point d'entrée 'app_dev.php', donc <dossier>/web/app_dev.php/about pour accéder à notre exemple."
+    },
+    {
+      "type": "markdown",
+      "data": "Maintenant, si je souhaite accéder à cette URL : /about/{prenom}\nOn peut tout simplement envoyer des paramètres à notre méthode aboutAction()"
+    },
+    {
+      "type": "markdown",
+      "data": "TRES UTILE POUR DEBUGGER LES ROUTES :\n bin/console debug:router"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "    /**\n     * @param string $prenom\n     * @param Request $request\n     * @return \\Symfony\\Component\\HttpFoundation\\Response\n     * @Route(\"/about/{prenom}\", name=\"aboutname\")\n     */\n   public function aboutController(string $prenom, Request $request) {\n        var_dump($prenom);\n        $prenom = ucfirst($prenom);\n        return $this->render('default/about.html.twig', [\n            'p' => $prenom\n        ]);\n        //Par ce mécanisme, je transmet la valeur de ma variable au template about\n    }"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": "(pour vider le cache, supprimer le cache dans le dossier var !)"
+    },
+    {
+      "type": "markdown",
+      "data": "[Twig](quiver-note-url/CDFDCD5D-97CC-4FAE-9B98-3B439ECCBDFF)"
+    },
+    {
+      "type": "markdown",
+      "data": "<link rel=\"stylesheet\" href={{ asset('css/style.css') }} />"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    }
+  ]
+}
