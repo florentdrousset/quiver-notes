@@ -47,7 +47,24 @@
     },
     {
       "type": "markdown",
-      "data": ""
+      "data": "bin/console make:fixtures"
+    },
+    {
+      "type": "markdown",
+      "data": "https://github.com/fzaninotto/Fake"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "<?php\n\nnamespace App\\DataFixtures;\n\nuse App\\Entity\\Artist;\nuse App\\Entity\\Event;\nuse Doctrine\\Bundle\\FixturesBundle\\Fixture;\nuse Doctrine\\Common\\Persistence\\ObjectManager;\nuse Faker;\n\nclass AppFixtures extends Fixture\n{\n    public function load(ObjectManager $manager)\n    {\n        $faker = \\Faker\\Factory::create('fr_FR');\n        // $product = new Product();\n        // $manager->persist($product);\n        for($i = 0 ; $i < 10; $i++)\n        {\n            $artist = new Artist();\n            $artist->setNom($faker->name);\n            $artist->setPays($faker->country);\n            $artist->setStyle($faker->jobTitle);\n            $artist->setPresentation($faker->catchPhrase);\n            $manager->persist($artist);\n        }\n\n\n        for($i = 0 ; $i < 10; $i++)\n        {\n            $event = new Event();\n            $event->setType($faker->companySuffix);\n            $event->setDateDebut($faker->dateTime($max = 'now', $timezone = null));\n            $event->setDateFin($faker->dateTime($max = 'now', $timezone = null));\n            $event->setLieu($faker->company);\n            $event->setVille($faker->city);\n            $event->setDescription($faker->catchPhrase);\n            $event->setPrix($faker->numberBetween($min = 5, $max = 150));\n            $manager->persist($event);\n\n        }\n        \n\n        $manager->flush();\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "bin/console doctrine:fixtures:load --append"
+    },
+    {
+      "type": "markdown",
+      "data": "Le flag --append permet d'ajouter les données sans purger la base de données !"
     },
     {
       "type": "markdown",
