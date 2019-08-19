@@ -3,6 +3,58 @@
   "cells": [
     {
       "type": "markdown",
+      "data": "### Lundi 19 Août 2019"
+    },
+    {
+      "type": "markdown",
+      "data": "Création d'une page à partir d'une méthode d'un contrôleur grâce au [tutoriel de Symfony](https://symfony.com/doc/current/page_creation.html)\n\n"
+    },
+    {
+      "type": "markdown",
+      "data": "Création d'utilisateurs, 4 étapes :\n- Créer une (ou des) entité(s) utilisateur. -> Liée au noyau de Symfony\n- Gestion de la connexion\n- Configuration (dossier config) (voteurs -> ACL ((Access Control List))\n- Appeler les utilisateurs -> gestion des droits d'accès\n\nPour créer une entité user 'automatiquement', on peut utiliser la commande suivante :"
+    },
+    {
+      "type": "markdown",
+      "data": "bin/console make:user"
+    },
+    {
+      "type": "markdown",
+      "data": "Cela nous permet d'avoir une méthode getRole, getPassword, getSalt, getUsername, eraseCredentials..."
+    },
+    {
+      "type": "markdown",
+      "data": "bin/console make:auth"
+    },
+    {
+      "type": "markdown",
+      "data": "En choisissant l'option login form, on pourra ensuite accéder à notre formulaire par l'URL /login"
+    },
+    {
+      "type": "markdown",
+      "data": "On peut aussi utiliser la commande\nbin/console make:register-form"
+    },
+    {
+      "type": "markdown",
+      "data": "pour crééer un formulaire d'enregistrement."
+    },
+    {
+      "type": "markdown",
+      "data": "Les méthodes et routes login et logout se trouvent dans le SecurityController ainsi créé."
+    },
+    {
+      "type": "markdown",
+      "data": "On gère les rôles dans security.yaml"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
       "data": "### Mardi 13 Août 2019"
     },
     {
