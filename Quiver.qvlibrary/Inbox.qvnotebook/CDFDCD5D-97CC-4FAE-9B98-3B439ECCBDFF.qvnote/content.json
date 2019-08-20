@@ -3,7 +3,7 @@
   "cells": [
     {
       "type": "markdown",
-      "data": "### TWIG\n\nTwig est un moteur de rendu utilisé par Symfony. \nPour reprendre notre exemple précédent, on peut afficher Bonjour {{ p }} dans notre vue associée !\nOn peut tout à fait mélanger twig et HTML."
+      "data": "## TWIG\n\nTwig est un moteur de rendu utilisé par Symfony. \nPour reprendre notre exemple précédent, on peut afficher Bonjour {{ p }} dans notre vue associée !\nOn peut tout à fait mélanger twig et HTML."
     },
     {
       "type": "code",
@@ -52,6 +52,24 @@
       "type": "code",
       "language": "twig",
       "data": "{{ render(controller('App\\\\Controller\\\\DefaultController::relatedAction',\n        'name': { books.auteur })\n    ) }}"
+    },
+    {
+      "type": "markdown",
+      "data": "### Mécanisme des requêtes via Twig"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "$artist = $repository->find(25);\nreturn ... ['a' => $artist];\n// On aura donc accès à 'a' dans Twig."
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": "{% for e in a.events %}\n{# on parcourt les évènements de l'artist. En tâche de fond, il se passe $artist->getEvents. On fait appel à Doctrine qui va faire une requête SQL. Au moment où cette ligne est executée, on relance une requête via le modèle ! #}\n{{ e.heureDebut }}\n{% endfor %}"
+    },
+    {
+      "type": "markdown",
+      "data": "Twig récupère en fait les informations minimum de 'Artist', et récupèrera les infos à la volée via Doctrine au moment ou notre boucle Twig sera lue."
     }
   ]
 }

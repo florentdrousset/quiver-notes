@@ -3,6 +3,96 @@
   "cells": [
     {
       "type": "markdown",
+      "data": "### Mardi 20 Août 2019"
+    },
+    {
+      "type": "markdown",
+      "data": "J'ai implémenté un système d'upload de fichier dans mes classes Event et Product. Plusieurs étapes pour cela, toutes tirées du [tutoriel de la doc Symfony](https://symfony.com/doc/current/controller/upload_file.html)\n1. Rajouter une "
+    },
+    {
+      "type": "markdown",
+      "data": "On regarde dans [Security.yaml](quiver-note-url/4E0DB276-8A3E-47B1-92B1-CE85F00C90FD)"
+    },
+    {
+      "type": "code",
+      "language": "sh",
+      "data": "make:user "
+    },
+    {
+      "type": "markdown",
+      "data": "-> Entity\n-> Repository __(classe de requête)__\n-> [Security.yaml](quiver-note-url/4E0DB276-8A3E-47B1-92B1-CE85F00C90FD)"
+    },
+    {
+      "type": "markdown",
+      "data": "providers\nusers:\nentity:\nclass:"
+    },
+    {
+      "type": "code",
+      "language": "sh",
+      "data": "make:entity"
+    },
+    {
+      "type": "markdown",
+      "data": "make:auth -> [Guard](https://symfony.com/doc/current/security/guard_authentication.html) -> LoginFormAuthenticator"
+    },
+    {
+      "type": "code",
+      "language": "sh",
+      "data": "make:registration-form"
+    },
+    {
+      "type": "markdown",
+      "data": " permet de créer un formulaire d'inscription."
+    },
+    {
+      "type": "markdown",
+      "data": "Les controllers de Symfony héritent de la classe Controller, qui elle même implémente le trait ControllerTrait. Dans celle-ci, on y trouve la méthode `$this->getUser()` qui permet de récupérer un utilisateur. Si personne n'est connecté, cela renvoie quand même un résultat. On va donc vouloir vérifier que ce qui est renvoyé est une instance de la classe User.\n\nOn a aussi une méthode `$this->isGranted('ROLE_ADMIN')`. Qui permet de savoir si l'utilisateur connecté possède tel ou tel rôle. (admin en l'occurence). Cette méthode peut aussi être remplacée par une annotation : `@IsGranted('ROLE_ADMIN')`"
+    },
+    {
+      "type": "markdown",
+      "data": "On a aussi une méthode `$this->denyAccessUnlessGranted('ROLE_ADMIN')`. Si la personne n'a pas le rôle Admin, on lui refuse l'accès et renvoie une erreur."
+    },
+    {
+      "type": "markdown",
+      "data": "---"
+    },
+    {
+      "type": "markdown",
+      "data": "On peut aussi utiliser un objet `app.user` ou `is_granted` directement dans [Twig](quiver-note-url/CDFDCD5D-97CC-4FAE-9B98-3B439ECCBDFF)"
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": " {% if is_granted('ROLE_MANAGER') == false %}\n                  my message \n {% endif %}"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "$artist = $repository->find(25);\nreturn ... ['a' => $artist];\n// On aura donc accès à 'a' dans Twig."
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": "{% for e in a.events %}\n{# on parcourt les évènements de l'artist. En tâche de fond, il se passe $artist->getEvents. On fait appel à Doctrine qui va faire une requête SQL. Au moment où cette ligne est executée, on relance une requête via le modèle ! #}\n{{ e.heureDebut }}\n{% endfor %}"
+    },
+    {
+      "type": "markdown",
+      "data": "[Twig](quiver-note-url/CDFDCD5D-97CC-4FAE-9B98-3B439ECCBDFF) récupère en fait les informations minimum de 'Artist', et récupèrera les infos à la volée via Doctrine au moment ou notre boucle Twig sera lue."
+    },
+    {
+      "type": "markdown",
+      "data": "----"
+    },
+    {
+      "type": "markdown",
+      "data": "3 niveaux de sécurité dans Symfony :\n- Security.yaml\n- Ce qu'on va mettre dans nos controllers\n- Voteurs"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
       "data": "### Lundi 19 Août 2019"
     },
     {
@@ -14,7 +104,8 @@
       "data": "Création d'utilisateurs, 4 étapes :\n- Créer une (ou des) entité(s) utilisateur. -> Liée au noyau de Symfony\n- Gestion de la connexion\n- Configuration (dossier config) (voteurs -> ACL ((Access Control List))\n- Appeler les utilisateurs -> gestion des droits d'accès\n\nPour créer une entité user 'automatiquement', on peut utiliser la commande suivante :"
     },
     {
-      "type": "markdown",
+      "type": "code",
+      "language": "sh",
       "data": "bin/console make:user"
     },
     {
@@ -22,7 +113,8 @@
       "data": "Cela nous permet d'avoir une méthode getRole, getPassword, getSalt, getUsername, eraseCredentials..."
     },
     {
-      "type": "markdown",
+      "type": "code",
+      "language": "sh",
       "data": "bin/console make:auth"
     },
     {
@@ -30,8 +122,9 @@
       "data": "En choisissant l'option login form, on pourra ensuite accéder à notre formulaire par l'URL /login"
     },
     {
-      "type": "markdown",
-      "data": "On peut aussi utiliser la commande\nbin/console make:register-form"
+      "type": "code",
+      "language": "sh",
+      "data": "On peut aussi utiliser la commande\nbin/console make:registration-form"
     },
     {
       "type": "markdown",
@@ -231,7 +324,7 @@
     },
     {
       "type": "markdown",
-      "data": "Grâce à ca, on a plus a ajouter le toString dans notre controller Artist."
+      "data": "Grâce à ca, on a plus a ajouter le toString dans notre controller Artist.aa---"
     },
     {
       "type": "markdown",
@@ -401,7 +494,23 @@
     },
     {
       "type": "markdown",
-      "data": "<link rel=\"stylesheet\" href={{ asset('css/style.css') }} />"
+      "data": "<link rel=\"stylesheet\" href={{ asset('css/style.css') }} />\u0003aa"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
     },
     {
       "type": "markdown",
