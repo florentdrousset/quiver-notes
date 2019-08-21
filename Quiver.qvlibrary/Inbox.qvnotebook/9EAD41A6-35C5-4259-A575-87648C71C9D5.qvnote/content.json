@@ -3,7 +3,140 @@
   "cells": [
     {
       "type": "markdown",
-      "data": "### Mardi 20 Août 2019"
+      "data": "## Mercredi 21 Août\n\n#### Services\nQuand Symfony démarre, l'une des premières choses qu'il fait est de construire le _conteneur de services_, qui gère toutes les dépendandes entre les différents services. "
+    },
+    {
+      "type": "markdown",
+      "data": "* Exercice : construction de notre premier service"
+    },
+    {
+      "type": "markdown",
+      "data": "Service qui va afficher sur la page d'accueil la chaîne de caractère qui nous sera fournie par le service. Dans le dossier src/, on crée un nouveau dossier /hello. Dans ce dossier, on crée un fichier HelloWorld.php. Ce fichier va contenir une classe HelloWorld, avec une méthode 'yo' qui renvoie 'yo'.  "
+    },
+    {
+      "type": "markdown",
+      "data": "Dans la méthode de notre controller, on peut directement __injecter des services__ en paramètres de notre méthode."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "class WelcomeController extends AbstractController {\n  //On passe notre service (classe) HelloWorld en argument, et on peut ensuite employer notre classe au sein de la méthode de notre controller\n    public function welcome(EventRepository $eventRepository, \\App\\Hello\\HelloWorld $h) {\n       return $this->render(\n           'index/indexView.html.twig', [\n               'event' => $eventRepository->findAll(),\n               'message' => $h->yo()\n           ]\n       );\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "Un ajout de service classique est le service Request."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "public function index(Request $request, $v1, $v2)"
+    },
+    {
+      "type": "markdown",
+      "data": "Dans le fichier __service.yaml__, on peut définir des \"constantes\" de projet appelés parameters. Entre %, on utilise des variables yaml."
+    },
+    {
+      "type": "markdown",
+      "data": "Pour y accéder, on utilise la méthode getParameter()."
+    },
+    {
+      "type": "markdown",
+      "data": "(Dans notre fichier .env, on peut aussi définir des constantes globales)"
+    },
+    {
+      "type": "markdown",
+      "data": "Dans notre service.yaml, on a ensuite la section 'services' qui contient la section 'default'."
+    },
+    {
+      "type": "markdown",
+      "data": "L'auto-\nwiring permet d'organiser la dépendance des services entre eux sans avoir à déclarer quoi que ce soit.\nL'autoconfigure "
+    },
+    {
+      "type": "markdown",
+      "data": "Dans notre App\\, on veut considérer que toutes les classes qui sont dans le dossier src sont considérées comme des services. "
+    },
+    {
+      "type": "markdown",
+      "data": "On peut obtenir une liste de tous les services de notre application avec la commande"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "bin/console debug:container"
+    },
+    {
+      "type": "markdown",
+      "data": "On peut aussi ajouter un nom de service ou une chaîne de caratère à la fin de cette commande pour rechercher un service en particulier. S'il n'y a qu'un seul nom de service qui correspond, on obtient des détails sur le service en question."
+    },
+    {
+      "type": "markdown",
+      "data": "On peut aussi associer des services à d'autres services (?) avec le système de tags."
+    },
+    {
+      "type": "markdown",
+      "data": "###### arguments\n-> constante\n-> service (dépendance)\n-> paramètre\n\n###### calls\n\n###### tags"
+    },
+    {
+      "type": "markdown",
+      "data": "On crée un constructeur dans notre service HelloWorld car on veut lui ajouter des paramètres. Problème : on n'instanciera jamais notre HelloWorld. Cest à cela que va nous service notre fichier de configuration services.yaml. On va lui ajouter une section !"
+    },
+    {
+      "type": "code",
+      "language": "yaml",
+      "data": "App\\Hello\\HelloWorld:\n        arguments:\n            $p: 'Hector'"
+    },
+    {
+      "type": "markdown",
+      "data": "Grâce à ceci, l'argument $p de notre service sera 'Hector'."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "class HelloWorld {\n    private $name;\n\n    public function __construct(string $p)\n    {\n       $this->name = $p;\n    }\n\n    public function yo() {\n        return 'yo '.$this->name;\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "On pourrait également utiliser nos paramètres yaml :"
+    },
+    {
+      "type": "code",
+      "language": "yaml",
+      "data": "    App\\Hello\\HelloWorld:\n        arguments:\n            $p: 'Hector'\n            $prenom: '%p1%'\n            #ici, le %p1% fait référence à notre paramètre p1"
+    },
+    {
+      "type": "markdown",
+      "data": "* Ex. 2 : On veut faire un service qui transforme une chaîne de caractères en maj, ou en minuscules... Et on veut que notre classe HelloWorld dépende de ce deuxième service.\n\nOn crée donc un deuxième service Magnifier."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "class Magnifier\n{\n    public function upper(string $s) {\n        return strtoupper($s);\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "On passe ensuite notre magnifier dans la signature du constructeur de notre service 'HelloWorld'. On peut ainsi utiliser notre magnifier au sein de notre service HelloWorld. "
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "use App\\Magnifier\\Magnifier;\n\nclass HelloWorld {\n    private $name;\n    private $m;\n\n    public function __construct(string $p, string $prenom, Magnifier $m)\n    {\n       $this->name = $prenom;\n       $this->magnifier = $m;\n    }\n\n    public function yo() {\n        return 'yo '.$this->name;\n    }\n\n    public function yoUpper() {\n        return $this->magnifier->upper($this->yo());\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "L'injection de dépendances est complètement gérée par le conteneur de services de Symfony. Quand vous avez des services, Symfony observe la signature de la fonction et remarque que le service a besoin d'une instance de la classe magnifier. Si Symfony observe que cette classe est un service, il comprend que l'on a besoin d'une instance de cette classe, grâce à __l'autowire__ du conteneur de services.\n\nOn peut aussi passer un nom de service de la manière suivante :"
+    },
+    {
+      "type": "code",
+      "language": "yaml",
+      "data": "$m: '@App\\HelloWorld\\NomDeService'"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": "## Mardi 20 Août 2019"
     },
     {
       "type": "markdown",
@@ -93,7 +226,7 @@
     },
     {
       "type": "markdown",
-      "data": "### Lundi 19 Août 2019"
+      "data": "## Lundi 19 Août 2019"
     },
     {
       "type": "markdown",
