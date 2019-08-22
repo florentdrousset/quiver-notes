@@ -3,6 +3,87 @@
   "cells": [
     {
       "type": "markdown",
+      "data": "## Jeudi 22 Août\n\nOn observe les caractéristiques d'un service à l'aide de la commande :\n`bin/console debug:container container`\n\n#### Service Id\nApp\\Hello\\HelloWorld;\n\ntroiswa.hello_world :\n  alias: App\\Hello\\HelloWorld\n  \n#### [Tag](https://openclassrooms.com/fr/courses/3619856-developpez-votre-site-web-avec-le-framework-symfony/3624937-les-services-utilisation-poussee)\n  \n#### Public\nSi on a besoin d'un service non injecté dans le constructeur, on peut l'appeler grâce à cette méthode, uniquement SI le service est public :\n`$this->get('App\\Hello\\HelloWorld);`\n\n#### Synthetic\nDans services.yaml, on peut définir en synthetic : true. (Utilité relative)\n\n#### [Lazy](https://symfony.com/doc/current/service_container/lazy_services.html)\n\nDichotomie __eager__ / __lazy__"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "if ($this->isSubmitted() && $this->isValid())"
+    },
+    {
+      "type": "markdown",
+      "data": "Ici en PHP, comportement paresseux. Si le submitted est faux, il ne va pas évaluer le second terme de la condition. En cas de comportement vorace (eager), l'interpréteur évaluerait tous les membres de l'expression. \n\nDans le cas des services, Symfony ne va charger des services dans le conteneur qu'en cas où il en aura besoin. (lazy)\n(Typiquement, Doctrine a aussi un comportement lazy)"
+    },
+    {
+      "type": "markdown",
+      "data": "#### Shared\n\nQuand on utilise un service, c'est toujours le même objet : il n'est jamais recréé. On peut aussi définir le shared sur \"no\", et dans ce cas là on instanciera un nouvel objet à chaque fois que le service est utilisé.\n\n-----\n\nPour injecter des services, on utilise classiquement l'injection de dépendance à travers le `__construct`. Cependant, on peut aussi le faire par les setters."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "public $container\n\npublic function setContainer(ContainerInterface $c) {\n  $this->container = $c;\n}\n\n...\n\n$s->container->getParameter($blabla)"
+    },
+    {
+      "type": "markdown",
+      "data": "Cela nous permet d'avoir des dépendances optionnelles."
+    },
+    {
+      "type": "markdown",
+      "data": "Dans notre fichier `services.yaml`, on peut définir des calls.\nhttps://symfony.com/doc/current/service_container/calls.html"
+    },
+    {
+      "type": "code",
+      "language": "yaml",
+      "data": "    App\\Hello\\HelloWorld:\n        arguments:\n            $p: 'Hector'\n            $prenom: '%p1%'\n            #ici, le %p1% fait référence à notre paramètre p1\n\n        calls:"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": "__Exercice__ : si on passe un nom d'image à notre service, on veut que celui-ci nous ressorte une présentation plus riche de cette image (avec un <figure>) par exemple. Exemple twig :"
+    },
+    {
+      "type": "code",
+      "language": "twig",
+      "data": "{{ e.img | figure(e.description) | raw }}"
+    },
+    {
+      "type": "markdown",
+      "data": "Quand on écrira ça, cela insérera toute la structure HTML en question dans notre template. Si le texte est trop long, prend (par exemple) les 50 premiers caractères.\nDonc tout le code <img src=\"asset(truc)\"> sera remplacé par le code twig ci-dessus."
+    },
+    {
+      "type": "markdown",
+      "data": "Pour cela, on va écrire une [extension Twig](https://symfony.com/doc/current/templating/twig_extension.html)"
+    },
+    {
+      "type": "markdown",
+      "data": "Quand on fait hériter une classe de AbstractExtension, Symfony comprend qu'elle est une extension Twig.\nIl faut ensuite déclarer les filtres avec la fonction getFilters()"
+    },
+    {
+      "type": "markdown",
+      "data": "__Exercice__ : on a utilisé l'API Wiki"
+    },
+    {
+      "type": "markdown",
+      "data": "__Exercice__ :\npartie symfony : 1 route + 1 controller\nroute /artiste/{id}/sameStyle\n\npartie JS :\nroute de type /artiste/24/same-style"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "fetch().then(function(response))..."
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
       "data": "## Mercredi 21 Août\n\n#### Services\nQuand Symfony démarre, l'une des premières choses qu'il fait est de construire le _conteneur de services_, qui gère toutes les dépendandes entre les différents services. "
     },
     {
