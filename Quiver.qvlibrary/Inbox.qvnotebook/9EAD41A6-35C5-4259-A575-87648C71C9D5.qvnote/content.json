@@ -3,6 +3,28 @@
   "cells": [
     {
       "type": "markdown",
+      "data": "## Vendredi 23 Août\n\nEvenements\n-> Kernel\n-> Application\n\nOn va les mettre dans un dossier `Event` de notre `src`.\nLes events sont traités par un dispatcher. \n\nen parallèle:\nphp composer.phar require swiftmailer\n\nOn crée une classe RegisterEvent :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "<?php\n\n\nnamespace App\\Event;\nuse Symfony\\Contracts\\EventDispatcher\\Event;\n\nfinal class RegisterEvent extends Event\n{\n    public const NAME = 'user.register';\n    private $user;\n    public function __construct(User $user) {\n        $this->user = $user;\n    }\n\n    public function getUser() {\n        return $this->user;\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "Quand on crée un évènement, on peut y stocker des informations via le constructeur. On a un évènement, on peut donc le distribuer.\nSi on veut utiliser cet évènement. \n\nOn a enregistré un utilisateur. On veut ensuite que cela déclenche un évènement."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "$e = new RegisterEvent($user);\n$dispatcher->dispatch();\n$dispatch->addEventListener"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "markdown",
       "data": "## Jeudi 22 Août\n\nOn observe les caractéristiques d'un service à l'aide de la commande :\n`bin/console debug:container container`\n\n#### Service Id\nApp\\Hello\\HelloWorld;\n\ntroiswa.hello_world :\n  alias: App\\Hello\\HelloWorld\n  \n#### [Tag](https://openclassrooms.com/fr/courses/3619856-developpez-votre-site-web-avec-le-framework-symfony/3624937-les-services-utilisation-poussee)\n  \n#### Public\nSi on a besoin d'un service non injecté dans le constructeur, on peut l'appeler grâce à cette méthode, uniquement SI le service est public :\n`$this->get('App\\Hello\\HelloWorld);`\n\n#### Synthetic\nDans services.yaml, on peut définir en synthetic : true. (Utilité relative)\n\n#### [Lazy](https://symfony.com/doc/current/service_container/lazy_services.html)\n\nDichotomie __eager__ / __lazy__"
     },
     {
