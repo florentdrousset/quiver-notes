@@ -1,0 +1,27 @@
+{
+  "title": "Events",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "[Doc Symfony Event Dispatcher](https://symfony.com/doc/current/components/event_dispatcher.html)\n[Doc Symfony Event Listeners & Subscribers](https://symfony.com/doc/current/event_dispatcher.html)\n\nExemple du `httpKernelComponent`:\nQuand un objet `Response` est créé, il pourrait être utile d'autoriser d'autre éléments du système de le modifier. Pour rendre cela possible, Symfony dispose d'un évènement `kernel.response`. Fonctionnement :\n\n1. Un listener dit au __dispatcher__ qu'il veut se mettre à écouter l'évènement `kernel.response`.\n2. Le kernel de Symfony dit au __dispatcher__ de dispatcher l'évènement `kernel.response`, en lui passant un objet `Event` qui aura accès à l'objet `Response`.\n3. Le dispatcher envoie une notif à tous ceux qui écoutent l'évènement `kernel.reponse`, autorisant chacun d'entre eux à modifier l'objet `Response`.\n\n\nDans notre dossier Event, on créera une classe pour le type d'évènement que l'on veut créer :\nex : OrderPlacedEvent, RegisterEvent, LoginEvent..."
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "<?php\n\n\nnamespace App\\Events;\n\nuse App\\Entity\\Event;\nuse App\\Entity\\User;\n\nclass BookingEvent extends Event\n{\n    public const NAME = 'book.booking';\n\n    private $user;\n\n    public function __construct(User $user)\n    {\n        $this->user = $user;\n    }\n\n    public function getUser()\n    {\n        return $this->user;\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "Ici, on a créé un getter pour que notre subscriber puisse accéder à notre User."
+    },
+    {
+      "type": "markdown",
+      "data": "à l'endroit où on veut appeler notre event :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "        $event = new BookingEvent($user);\n        $dispatcher = new EventDispatcher();\n        $dispatcher->dispatch($event, BookingEvent::NAME);"
+    }
+  ]
+}

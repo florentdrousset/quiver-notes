@@ -1,0 +1,9 @@
+{
+  "title": "Traduction",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "   1 # Traductions\n-  2\n|  3 1. paramètres\n|  4 2. routes\n|  5 3. -> templates twig\n|  6 -> controllers/services\n|  7 4. Importer la traduction\n|  8 5. traduction du contenu avec les extensions Doctrine(__translatable__)\n|  9\n| 10 Commençons par le 3 (Twig)\n| 11\n| 12 Si on a un template :\n| 13 ```twig\n| 14\n| 15 <p> {% trans %}Bienvenue sur xxx.com {% endtrans %}</p>\n| 16\n| 17 ```\n| 18\n| 19 Donc, penser à utiliser la balise `trans` partout où on aura une traduction à faire.\n| 20\n| 21 On peut accéder au debug avec la commande `bin/console debug:translation fr` par exemple. (ou `en`, `zh`, etc...)\n| 22\n| 23 `bin/console translation:update fr` pour ajouter la traduction française.\n| 24\n| 25 Les deux grands formats de traduction sont :\n| 26 * xlf\n| 27 * po\n| 28\n| 29 A la racine, on a un dossier translations/ qui contient tous les fichiers de traduction.\n| 30\n| 31 On voudrait avoir une politique d'URL qui intègre la langue. Les deux méthodes les plus répandues sont :\n| 32 * utilisation de sous-domaines (fr.wikipedia.org, en.wikipedia.org...)\n| 33 * utilisation d'URL multi-lingues (méthode que l'on va utiliser)\n| 34\n| 35\n| 36 _exemple_\n| 37 `index.php`   /artist/25\n| 38 on va intercaler la langue voulue dans l'URL :\n| 39 `index.php/fr/artiste/25`\n| 40\n| 41 Pour cela, on va utiliser la variable `{_locale}`\n| 42\n| 43 Si la langue n'existe pas, on se repliera sur une langue par défaut paramétrée dans le site.\n| 44\n| 45 On va remplacer nos `@Route ('/artist')` par `@Route'/{_locale}/artist`\n| 46\n| 47 On a un fichier `translation.yaml` pour choisir la langue par défaut."
+    }
+  ]
+}

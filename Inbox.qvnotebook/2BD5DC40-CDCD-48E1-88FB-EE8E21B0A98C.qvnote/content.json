@@ -1,0 +1,35 @@
+{
+  "title": "log",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "## Mer. 7 Août 2019"
+    },
+    {
+      "type": "markdown",
+      "data": "Autoloader fait maison :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "class Autoloader\n{\n    static function register() {\n        spl_autoload_register(array(__CLASS__, 'autoload'));\n    }\n\n    static function autoload($class) {\n        $class = str_replace('\\\\', '/', $class);\n        require ROOT_PATH . '/src/' . $class .'.php';\n    }\n}"
+    },
+    {
+      "type": "markdown",
+      "data": "index.php :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "const ROOT_PATH = __DIR__;\nrequire 'app/Autoloader.php';\nAutoloader::register();\nuse Exemple\\A;\n\n$test = new A;"
+    },
+    {
+      "type": "markdown",
+      "data": "penser à ajouter le mot clef \"final\" pour les classes qui ne seront pas des classes parent"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    }
+  ]
+}

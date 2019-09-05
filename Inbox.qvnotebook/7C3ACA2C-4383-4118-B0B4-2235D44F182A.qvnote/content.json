@@ -1,0 +1,9 @@
+{
+  "title": "Fixtures",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "   1 Exemple d'une classe de fixtures :\n   2 ```php\n   3 <?php\n   4 namespace App\\DataFixtures;\n   5\n   6 use App\\Entity\\Artist;\n   7 use App\\Entity\\Event;\n   8 use Doctrine\\Bundle\\FixturesBundle\\Fixture;\n   9 use Doctrine\\Common\\Persistence\\ObjectManager;\n  10 use Faker;\n  11\n  12 class AppFixtures extends Fixture\n  13 {\n  14     public function load(ObjectManager $manager)\n  15     {\n  16         // $product = new Product();\n  17         // $manager->persist($product);\n  18         $faker = Faker\\Factory::create();\n  19         for($i = 0 ; $i < 10; $i++)\n  20         {\n  21             $artist = new Artist();\n  22             $artist->setName($faker->name);\n  23             $artist->setCountry($faker->country);\n  24             $artist->setGenre($faker->randomElement(array('Rock', 'Jazz', 'Soul', 'Ambient')));\n  25             $artist->setDescription($faker->catchPhrase);\n  26             $manager->persist($artist);\n  27         }\n  28         $manager->flush();\n  29     }\n  30 }\n  31\n  32 ```\n  33\n  34 Pour charger les fixtures :\n  35 ```bash\n  36 php bin/console doctrine:fixtures:load\n  37 ```\n  38\n  39 On peut aussi ajouter le flag --append pour éviter de purger toute la DB."
+    }
+  ]
+}

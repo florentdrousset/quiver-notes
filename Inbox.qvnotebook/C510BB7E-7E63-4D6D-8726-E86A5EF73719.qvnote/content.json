@@ -1,0 +1,9 @@
+{
+  "title": "service.yaml",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "Dans le fichier __service.yaml__, on peut définir des \"constantes\" de projet appelés parameters. Entre %, on utilise des variables yaml.\nPour y accéder, on utilise la méthode getParameter().\n(Dans notre fichier .env, on peut aussi définir des constantes globales)\nDans notre service.yaml, on a ensuite la section 'services' qui contient la section 'default'."
+    }
+  ]
+}

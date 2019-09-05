@@ -1,0 +1,32 @@
+{
+  "title": "Doctrine",
+  "cells": [
+    {
+      "type": "code",
+      "language": "php",
+      "data": "\n <?php\n     public function findByEvents() {\n         //Requete DQL classique\n         /*$q = $this->getEntityManager();\n         $query = $q->createQuery('SELECT a.name FROM App\\Entity\\Event e JOIN e.artist_id a GROUP BY e.artist_id ORDER BY COUNT(e.artist_id) DESC')\n         ->setMaxResults(10);\n         $result = $query->getResult();*/\n\n         /*return $result;*/\n\n         //Version QueryBuilder\n         return $this->createQueryBuilder('e')\n             ->select('COUNT(e.artist_id) as maxE, a.name')\n             ->innerJoin('App\\Entity\\Artist', 'a')\n             ->where('a.id = e.artist_id')\n             ->groupBy('e.artist_id')\n             ->orderBy('maxE', 'DESC')\n             ->setMaxResults(2)\n             ->getQuery()\n             ->getResult();\n     }\n\n ```\n\n"
+    },
+    {
+      "type": "markdown",
+      "data": "[Tuto Query Builder en français](https://zestedesavoir.com/tutoriels/1713/doctrine-2-a-lassaut-de-lorm-phare-de-php/exploiter-une-base-de-donnees-avec-doctrine-2/a-la-rencontre-du-querybuilder-1/)"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "  32 $qexpr = $q1->expr()\n  33 $subrequest = $q1->select('a.id')\n  34 ->where($qexpr->like('a.pays, $qexpr->'literal('USA')));\n  35 ->where($qexpr->in('a.id', $subrequest->getDQL()))"
+    },
+    {
+      "type": "markdown",
+      "data": "Dans notre entité 'Artist', on a bien un champ 'events' qui assure la relation OneToMany avec la table 'Events'. Mais celle-ci n'apparait pas dans _PHPMyAdmin_.\n\nRequête pour chercher tous les artistes ayant fait le plus d'évènements et provenant de tel pays :"
+    },
+    {
+      "type": "code",
+      "language": "php",
+      "data": "     public function findByExampleField()\n     {\n         // SOUS-REQUÊTE\n         $q1 = $this->createQueryBuilder('x');\n         $qexpr = $q1->expr();\n         $subrequest = $q1->select('x.id')\n             ->where($qexpr->like('x.country', $qexpr->literal('USA')));\n\n         // REQUÊTE PRINCIPALE\n         return $this->createQueryBuilder('a')\n             ->select('a.name')\n             ->innerJoin('a.events', 'e')\n             ->where($qexpr->in('a.id', $subrequest->getDQL())) // INJECTION SOUS-REQUÊTE\n             ->groupBy('a.id')\n             ->getQuery()\n             ->getResult()\n             ;\n     }"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    }
+  ]
+}
