@@ -605,7 +605,7 @@
     },
     {
       "type": "markdown",
-      "data": "->flush() permet de remplir la base de données avec le contenu de notre objet."
+      "data": "->flush() permet de remplir la base de données avec le écontenu de notre objet."
     },
     {
       "type": "markdown",
