@@ -1,0 +1,9 @@
+{
+  "title": "Promesses",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "* Une promesse renvoie toujours une promesse\n* Si une promesse est résolue, la valeur résolue va dans le prochain .then()\n* Si une promesse est rejetée, la valeur rejetée va dans le prochain .catch"
+    }
+  ]
+}

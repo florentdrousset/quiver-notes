@@ -1,0 +1,67 @@
+{
+  "title": "JS log",
+  "cells": [
+    {
+      "type": "markdown",
+      "data": "### Mer. 11 Septembre 2019\n\n#### Types en JS :\n1. Types primitifs :\n  * undefined\n  * null\n  * boolean\n  * string\n  * number\n  * object\n2. Objets spéciaux :\n  * function\n  * array\n  * regexp\n  \n__Object__ = key/value pair.\n\nQuand on demande une propriété non-existante d'un objet, un \"undefined\" est renvoyé.\n\nQuand on définit une fonction, JS crée pour nous un objet qui a 3 propriétés : _name_, _length_ et _prototype_.\n\nà propos du __this__. On peut forcer le __this__ à être dans tel ou tel scope à l'aide de la méthode __call__.\n\nOn étudie les [Promesses](quiver-note-url/1B7101EF-46EF-484A-A648-918AB7923C36).\n\n\n## Mar. 10 Septembre 2019\n\nVoir les slides sur le moodle.\n\nVoir les [nouvelle features de ES6](http://es6-features.org/#Constants)\n\n#### Différences let / var / const\n\nvar = variable globale\nlet = portée fonction\nconst = même portée, mais pour une constante.\n__note__ : on peut faire _muter_ les propriétés d'un objet, malgré une déclaration \"const\".\n\n#### Templates Strings\n\nOn peut désormais utiliser les backticks pour délimiter des __template strings__.\nPermet de :\n* faire des retours à la ligne directement dans la string\n* [interpolation](https://putaindecode.io/articles/es6-es2015-les-template-strings/) : affichage des expressions ${expression}\n* fonctions fléchées (ou _lambda_)"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "myMethod.call(object1)"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "function multiplier2 (nombre) {\n\treturn nombre * 2;\n}\n\nconst multiplier2 = function (nombre) {\n\treturn nombre * 2;\n};\n\nconst multiplier2 = (nombre) => nombre * 2;"
+    },
+    {
+      "type": "markdown",
+      "data": "Important : Une arrow function n’a pas de contexte propre et donc ne déclare pas de this."
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "function saluer() {\n\tconsole.log(this);\n}\n\nsaluer(); // Window {}\n\nsaluer.call(\"Hey\"); // \"Hey\"\n// On ne pourrait pas faire ça avec une fonction fléchée. On ne peut pas attribuer un \"this\" à la volée à une fonction fléchée."
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "const chronometre = {\n    compteur : 0,\n    demarrer : function() {\n        setInterval(function() {\n            this.compteur++;\n            console.log(this.compteur);\n        }, 1000);\n    }\n};\n\nchronometre.demarrer();\n"
+    },
+    {
+      "type": "markdown",
+      "data": "* affectation par décomposition"
+    },
+    {
+      "type": "markdown",
+      "data": "L'affectation par décomposition est une opération qui rend possible l'extraction de variables depuis des tableaux ou des objets. Il s'agit d'une technique très pratique permettant d'extraire rapidement et sans fioritures les données nécessaires d'une structure complexe."
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "    let numbers = [1, 2, 3];\n    let [foo, bar] = numbers;\n\n    console.log(foo); // 1\n    console.log(bar); // 2\n  \n  /////\n  \n    let numbers = [1, 2, 3];\n    let data = {};\n    [data.foo, data.bar] = numbers;\n\n    console.log(data); // { foo: 1, bar: 2 }\n    \n  /////\n  \n    let numbers = [1, 2, 3];\n    let [foo, , baz] = numbers; // Si je n'ai pas besoin du deuxième élément\n\n    console.log(foo); // 1\n    console.log(baz); // 3"
+    },
+    {
+      "type": "markdown",
+      "data": "#### DÉCOMPOSITION"
+    },
+    {
+      "type": "markdown",
+      "data": "ES6 fournit deux nouveaux concepts étroitement liés : le rest et le spread (« décomposition »), pour les fonctions dont le nombre d’arguments varie. Dans cet exercice, nous allons explorer la partie décomposition.\n\nUn exemple classique de fonction variadique (dont le nombre d’arguments varie) est Math.max, qu’on peut appeler avec un nombre quelconque d’arguments : Math.max(1, 2) ou Math.max(1, 2, 3) ou…\n\nEn ES6, vous pouvez utiliser la syntaxe ...args pour « décomposer » un tableau en valeurs individuelles, notamment quand vous appelez ce genre de fonction. Par exemple :"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "data": "    var numbers = [1, 1, 2, 3, 5, 8];\n    var max = Math.max(...numbers);"
+    },
+    {
+      "type": "markdown",
+      "data": ""
+    }
+  ]
+}
