@@ -1,2 +1,0 @@
-Un __controller__ dans Symfony est sensé gérer les entrées et sorties _HTTP_ et renvoyer un obet `Response`.
-S'il hérite de la classe `AbstractController`, il aura accès à tout le container (et donc tous les services).

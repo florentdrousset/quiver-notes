@@ -1,0 +1,1 @@
+Pour changer la page d'accueil, aller dans Configuration > Système > Paramètres de base du site

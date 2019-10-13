@@ -1,1 +1,0 @@
-Permet à l'ORM de maintenir une cohérence entre l'application et les données stockées sur le disque
